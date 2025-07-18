@@ -1,10 +1,11 @@
-import { fetchNoteById } from "../../../../lib/api/clientApi";
+import {   fetchNoteByIdServer } from "../../../../lib/api/serverApi";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
 import NotePreviewClient from "./NotePreview.client";
+import { cookies } from "next/headers";
 
 type NoteDetailsProps = {
   params: Promise<{ id: string }>;
@@ -16,7 +17,7 @@ export default async function NotePreview({ params }: NoteDetailsProps) {
 
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(Number(id)),
+    queryFn: async () => fetchNoteByIdServer(id, (await cookies()).toString()),
   });
 
   return (

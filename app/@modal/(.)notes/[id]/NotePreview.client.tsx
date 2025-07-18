@@ -20,7 +20,7 @@ export default function NotePreviewClient({ id }: NotePreviewClientProps) {
     error,
   } = useQuery({  
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(Number(id)),
+    queryFn: () => fetchNoteById(id),
     refetchOnMount: false,
   });
   if (isLoading) return <p>Loading, please wait...</p>;
