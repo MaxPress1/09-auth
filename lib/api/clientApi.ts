@@ -1,4 +1,4 @@
-import api from "./api";
+
 import { type Note } from "../../types/note";
 import { AuthRequest, LoginRequest, ServerBoolResponse, User } from "../../types/user";
 import nextServer from "./api";
@@ -23,7 +23,7 @@ export async function fetchNotes({
   const params: FetchNotesParams = { page, perPage: 12 };
   if (search) params.search = search;
   if (tag) params.tag = tag;
-  const res = await api.get<NoteResponse>("/notes", {
+  const res = await nextServer.get<NoteResponse>("/notes", {
     params
   });
 
@@ -38,17 +38,17 @@ export async function createNote(noteData: {
   content?: string;
   tag: string;
 }) {
-    const res = await api.post<Note>("/notes/", noteData,);
+    const res = await nextServer.post<Note>("/notes/", noteData,);
   return res.data;
 }
 
-export async function deleteNote(id: number) {
-  const res = await api.delete<Note>(`/notes/${id}`);
+export async function deleteNote(id: string) {
+  const res = await nextServer.delete<Note>(`/notes/${id}`);
   return res.data;
 }
 
-export async function fetchNoteById(id: number) {
-  const res = await api.get<Note>(`/notes/${id}`);
+export async function fetchNoteById(id: string) {
+  const res = await nextServer.get<Note>(`/notes/${id}`);
   return res.data;
 }
 
@@ -63,15 +63,15 @@ export const register = async (data: AuthRequest) => {
 };
 
 export const getMe = async () => {
-  const { data } = await nextServer<User>(`/auth/me`);
-  return data;
+  const res = await nextServer.get<User>(`/users/me`);
+  return res.data;
 };
 
 export const logOut = async () => {
   await nextServer.post<ServerBoolResponse>(`/auth/logout`);
 };
 
-export const updateUser = async (userName: string) => {
-  const { data } = await nextServer.patch<User>(`/auth/me`, { userName });
-  return data;
+export const updateUser = async (username: string) => {
+  const res = await nextServer.patch<User>(`/users/me`, { username });
+  return res.data;
 };

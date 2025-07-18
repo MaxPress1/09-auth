@@ -4,23 +4,22 @@ import { useRouter } from 'next/navigation';
 import css from './SignUpPage.module.css';
 import { AuthRequest } from '../../../types/user';
 import { register } from '../../../lib/api/clientApi';
-import { useAuth } from '../../../lib/store/authStore';
+import { useAuthStore } from '../../../lib/store/authStore';
 
 export default function SignUpPage() {
 
     const router = useRouter();
   const [error, setError] = useState("");
 
-  const setUser = useAuth(state => state.setUser);
+  const setUser = useAuthStore((state) => state.setUser);
   
     const handleSubmit = async (formData: FormData) => {
         try {
           const formValues = Object.fromEntries(formData) as AuthRequest;
-          console.log(formValues);
           const res = await register(formValues);
           if (res) {
             setUser(res.data);
-            router.push("/profile");
+            router.replace("/profile");
           }
         } catch (error) {
           console.log(error);

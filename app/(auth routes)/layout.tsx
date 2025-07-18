@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/lib/store/authStore";
+import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -10,7 +10,7 @@ export default function PublicLayout({
   children: React.ReactNode;
 }>) {
   const [loading, setLoading] = useState(true);
-  const clearIsAuthenticated = useAuth(
+  const clearIsAuthenticated = useAuthStore(
     (state) => state.clearIsAuthenticated
   );
 

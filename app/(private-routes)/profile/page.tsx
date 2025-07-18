@@ -1,12 +1,10 @@
-"use client";
-
 import Link from 'next/link';
 import css from './ProfilePage.module.css';
-import { useAuth } from '../../../lib/store/authStore';
 import Image from "next/image";
+import { getUserFromServer } from "@/lib/api/serverApi";
 
-export default function Profile() {
-  const { user } = useAuth();
+export default async function Profile() {
+    const user = await getUserFromServer();
 
   return (
     <main className={css.mainContent}>
@@ -19,7 +17,7 @@ export default function Profile() {
         </div>
         <div className={css.avatarWrapper}>
           <Image
-            src={user?.photoUrl || ""}
+            src={user?.avatar || "/default-avatar.png"}
             alt="User Avatar"
             width={120}
             height={120}
@@ -27,10 +25,10 @@ export default function Profile() {
           />
         </div>
         <div className={css.profileInfo}>
-          <p>Username: {user?.userName}</p>
+          <p>Username: {user?.username}</p>
           <p>Email: {user?.email}</p>
         </div>
-      </div>
+      </div>  
     </main>
   );
 }
