@@ -29,7 +29,7 @@ export default function NoteList({ notes }: NoteListProps) {
             <Link className={css.link} href={`/notes/${id}`}>
               View details
             </Link>
-            <button className={css.button} onClick={() => mutate(id)}>
+            <button className={css.button} onClick={() => mutate(id || "")}>
               Delete
             </button>
           </div>
