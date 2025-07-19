@@ -2,6 +2,36 @@ import Link from 'next/link';
 import css from './ProfilePage.module.css';
 import Image from "next/image";
 import { getUserFromServer } from "@/lib/api/serverApi";
+import { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: `Profile Page`,
+    description: "Here is the profile page",
+    openGraph: {
+      title: `Profile Page`,
+      description: "Here is the profile page",
+      url: `https://07-routing-nextjs-ochre.vercel.app/profile`,
+      siteName: "NoteHub",
+      images: [
+        {
+          url: "https://ac.goit.global/fullstack/react/og-meta.jpg",
+          width: 1200,
+          height: 630,
+          alt: "NoteHub",
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Profile Page`,
+      description: "Here is the profile page",
+      images: ["https://ac.goit.global/fullstack/react/og-meta.jpg"],
+    },
+  };
+}
+
 
 export default async function Profile() {
     const user = await getUserFromServer();

@@ -12,6 +12,12 @@ export interface NoteResponse {
   totalPages: number;
 }
 
+export interface NoteCreate {
+  title: string;
+  content?: string;
+  tag: string;
+}
+
 interface FetchNotesParams {
   search?: string;
   page?: number;
@@ -23,8 +29,9 @@ export async function fetchNotes({
   page = 1,
   search,
   tag,
+  perPage = 12,
 }: FetchNotesParams): Promise<NoteResponse> {
-  const params: FetchNotesParams = { page, perPage: 12 };
+  const params: FetchNotesParams = { page, perPage };
   if (search) params.search = search;
   if (tag) params.tag = tag;
   const res = await nextServer.get<NoteResponse>("/notes", {
@@ -37,11 +44,7 @@ export async function fetchNotes({
   };
 }
 
-export async function createNote(noteData: {
-  title: string;
-  content?: string;
-  tag: string;
-}) {
+export async function createNote(noteData: NoteCreate) {
   const res = await nextServer.post<Note>("/notes/", noteData);
   return res.data;
 }
@@ -63,17 +66,21 @@ export async function login(data: LoginRequest) {
 
 export async function register(data: AuthRequest) {
   const res = await nextServer.post<User>("/auth/register", data);
-  return res;
+  return res.data;
 };
 
 export async function getMe() {
   const res = await nextServer.get<User>("/users/me");
-  console.log(res.data);
   return res.data;
 };
 
 export async function logOut() {
-  await nextServer.post<ServerBoolResponse>("/auth/logout");
+  try {
+    await nextServer.post<ServerBoolResponse>("/auth/logout");
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 export async function updateUser(username: string) {
@@ -82,5 +89,10 @@ export async function updateUser(username: string) {
 };
 
 export async function checkSession() {
-  await nextServer.get("/auth/session");
+  try {
+    await nextServer.get("/auth/session");
+    return true;
+  } catch {
+    return false;
+  }
 }

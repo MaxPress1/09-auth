@@ -16,21 +16,20 @@ export interface FetchNotesParams {
   tag?: string;
 }
 
-
 export async function fetchNotesServer({
   page = 1,
   search,
   tag,
-  cookies,
-}: FetchNotesParams & { cookies: string }): Promise<NoteResponse> {
+}: FetchNotesParams): Promise<NoteResponse> {
   const params: FetchNotesParams = { page, perPage: 12 };
   if (search) params.search = search;
   if (tag) params.tag = tag;
+  const cookieStore = await cookies();
   const res = await nextServer.get<NoteResponse>("/notes", {
     params,
     headers: {
       Accept: "application/json",
-      Cookie: cookies,
+      Cookie: cookieStore.toString(),
     },
   });
 
@@ -45,30 +44,32 @@ export async function createNoteServer(
     title: string;
     content?: string;
     tag: string;
-  },
-  cookies: string
+  }
 ) {
+  const cookieStore = await cookies();
   const res = await nextServer.post<Note>("/notes/", noteData, {
     headers: {
-      Cookie: cookies,
+      Cookie: cookieStore.toString(),
     },
   });
   return res.data;
 }
 
-export async function deleteNoteServer(id: string, cookies: string) {
+export async function deleteNoteServer(id: string) {
+  const cookieStore = await cookies();
   const res = await nextServer.delete<Note>(`/notes/${id}`, {
     headers: {
-      Cookie: cookies,
+      Cookie: cookieStore.toString(),
     },
   });
   return res.data;
 }
 
-export async function fetchNoteByIdServer(id: string, cookies: string) {
+export async function fetchNoteByIdServer(id: string) {
+  const cookieStore = await cookies();
   const res = await nextServer.get<Note>(`/notes/${id}`, {
     headers: {  
-      Cookie: cookies,
+      Cookie: cookieStore.toString(),
     },
   });
   return res.data;
@@ -81,7 +82,6 @@ export async function checkServerSession() {
       Cookie: cookieStore.toString(),
     },
   });
-  console.log(res);
 
   return res;
 };
