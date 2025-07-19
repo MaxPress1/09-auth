@@ -56,30 +56,31 @@ export async function fetchNoteById(id: string) {
   return res.data;
 }
 
-export const login = async (data: LoginRequest) => {
+export async function login(data: LoginRequest) {
   const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 };
 
-export const register = async (data: AuthRequest) => {
+export async function register(data: AuthRequest) {
   const res = await nextServer.post<User>("/auth/register", data);
   return res;
 };
 
-export const getMe = async () => {
+export async function getMe() {
   const res = await nextServer.get<User>("/users/me");
+  console.log(res.data);
   return res.data;
 };
 
-export const logOut = async () => {
+export async function logOut() {
   await nextServer.post<ServerBoolResponse>("/auth/logout");
 };
 
-export const updateUser = async (username: string) => {
+export async function updateUser(username: string) {
   const res = await nextServer.patch<User>("/users/me", { username });
   return res.data;
 };
 
-export const checkSession = async () => {
+export async function checkSession() {
   await nextServer.get("/auth/session");
-};
+}
