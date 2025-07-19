@@ -8,22 +8,24 @@ import { useAuthStore } from '../../../lib/store/authStore';
 
 export default function SignInPage() {
 
-    const router = useRouter();
-    const setUser = useAuthStore((state) => state.setUser);
-    const [error, setError] = useState("");
-    const handleSubmit = async (formData: FormData) => {
-        try {
-            const formValues = Object.fromEntries(formData) as LoginRequest;
-            const res = await login(formValues);
-            if (res) {
-                setUser(res);
-                router.replace("/profile");
-            }
-        } catch (error) {
-            console.log(error);
-            setError("Invalid email or password");
-        }
+const [error, setError] = useState("");
+
+const router = useRouter();
+const setUser = useAuthStore((state) => state.setUser);
+
+const handleSubmit = async (formData: FormData) => {
+  try {
+    const formValues = Object.fromEntries(formData) as LoginRequest; 
+    const res = await login(formValues);
+    if (res) {
+      setUser(res);
+      router.replace("/profile");
     }
+  } catch (error) {
+    console.log(error);
+    setError("Invalid email or password");
+  }
+};
   return (
     <main className={css.mainContent}>
       <form className={css.form} action={handleSubmit}>

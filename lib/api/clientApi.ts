@@ -1,6 +1,10 @@
-
 import { type Note } from "../../types/note";
-import { AuthRequest, LoginRequest, ServerBoolResponse, User } from "../../types/user";
+import {
+  AuthRequest,
+  LoginRequest,
+  ServerBoolResponse,
+  User,
+} from "../../types/user";
 import nextServer from "./api";
 
 export interface NoteResponse {
@@ -24,7 +28,7 @@ export async function fetchNotes({
   if (search) params.search = search;
   if (tag) params.tag = tag;
   const res = await nextServer.get<NoteResponse>("/notes", {
-    params
+    params,
   });
 
   return {
@@ -38,7 +42,7 @@ export async function createNote(noteData: {
   content?: string;
   tag: string;
 }) {
-    const res = await nextServer.post<Note>("/notes/", noteData,);
+  const res = await nextServer.post<Note>("/notes/", noteData);
   return res.data;
 }
 
@@ -63,15 +67,19 @@ export const register = async (data: AuthRequest) => {
 };
 
 export const getMe = async () => {
-  const res = await nextServer.get<User>(`/users/me`);
+  const res = await nextServer.get<User>("/users/me");
   return res.data;
 };
 
 export const logOut = async () => {
-  await nextServer.post<ServerBoolResponse>(`/auth/logout`);
+  await nextServer.post<ServerBoolResponse>("/auth/logout");
 };
 
 export const updateUser = async (username: string) => {
-  const res = await nextServer.patch<User>(`/users/me`, { username });
+  const res = await nextServer.patch<User>("/users/me", { username });
   return res.data;
+};
+
+export const checkSession = async () => {
+  await nextServer.get("/auth/session");
 };

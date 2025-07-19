@@ -7,10 +7,11 @@ import { logOut } from '../../lib/api/clientApi';
 import Link from 'next/link';
 
 export default function AuthNavigation() {
+  const { isAuthenticated, user } = useAuthStore();
+  const clearIsAuthenticated = useAuthStore(
+    (state) => state.clearIsAuthenticated
+  );
   const router = useRouter();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
-  const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
 
   const handleLogout = async () => {
     await logOut();
