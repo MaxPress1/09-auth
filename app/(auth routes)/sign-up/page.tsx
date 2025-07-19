@@ -18,7 +18,7 @@ export default function SignUpPage() {
           const formValues = Object.fromEntries(formData) as AuthRequest;
           const res = await register(formValues);
           if (res) {
-            setUser(res.data);
+            setUser(res);
             router.replace("/profile");
           }
         } catch (error) {
